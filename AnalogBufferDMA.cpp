@@ -75,6 +75,7 @@ static void dumpDMA_TCD(DMABaseClass *dmabc)
 //=============================================================================
 void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
 {
+  _since_init_micros = 0; //start tracking time
   // enable DMA and interrupts
 #ifdef DEBUG_DUMP_DATA
   Serial.println("AnalogBufferDMA::init");
@@ -180,6 +181,7 @@ void AnalogBufferDMA::init(ADC *adc, int8_t adc_num)
 #endif
 
   _last_isr_time = millis();
+  _last_isr_time_micros = _since_init_micros;
 }
 
 //=============================================================================
@@ -223,6 +225,7 @@ bool AnalogBufferDMA::clearCompletion()
 //=============================================================================
 void AnalogBufferDMA::processADC_DMAISR()
 {
+  _last_isr_time_micros = _since_init_micros;
   //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
   uint32_t cur_time = millis();
 

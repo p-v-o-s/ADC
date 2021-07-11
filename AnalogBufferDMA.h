@@ -60,6 +60,9 @@ public:
     inline uint16_t bufferCountLastISRFilled() { return (!_buffer2 || (_interrupt_count & 1)) ? _buffer1_count : _buffer2_count; }
     inline uint32_t interruptCount() { return _interrupt_count; }
     inline uint32_t interruptDeltaTime() { return _interrupt_delta_time; }
+    inline uint32_t interruptTimeMicros() { return _last_isr_time_micros; }
+    inline uint32_t sinceInitMicros() { return _since_init_micros; }
+
     inline bool interrupted() { return _interrupt_delta_time != 0; }
     inline void clearInterrupt() { _interrupt_delta_time = 0; }
     inline void userData(uint32_t new_data) { _user_data = new_data; }
@@ -69,6 +72,9 @@ protected:
     volatile uint32_t _interrupt_count = 0;
     volatile uint32_t _interrupt_delta_time;
     volatile uint32_t _last_isr_time;
+    volatile elapsedMicros _since_init_micros;
+    volatile uint32_t _last_isr_time_micros;
+
 
     volatile uint16_t *_buffer1;
     uint16_t _buffer1_count;
